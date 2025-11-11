@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
+  basePath: '/novel-ads-ui-demo',
+  assetPrefix: '/novel-ads-ui-demo/',
 };
 
 export default nextConfig;
