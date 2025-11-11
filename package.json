@@ -24,7 +24,7 @@
     "tailwindcss": "^4",
     "typescript": "^5"
   },
-  "homepage": "https://https://ebas-dev.github.io/novel-ads-ui-demo/",
+  "homepage": "https://ebas-dev.github.io/novel-ads-ui-demo/",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
