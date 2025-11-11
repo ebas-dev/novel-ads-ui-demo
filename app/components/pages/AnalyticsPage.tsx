@@ -37,26 +37,18 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Key Metrics */}
-      <div className="grid grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-3 gap-4 mb-6">
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
           <div className="text-sm text-gray-600 mb-2">Total Impressions</div>
-          <div className="text-3xl font-bold text-blue-600 mb-1">2.4M</div>
-          <div className="text-xs text-green-600">↑ 15% vs last month</div>
+          <div className="text-3xl font-bold text-blue-600">2.4M</div>
         </div>
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-          <div className="text-sm text-gray-600 mb-2">Engagement Rate</div>
-          <div className="text-3xl font-bold text-green-600 mb-1">3.4%</div>
-          <div className="text-xs text-green-600">↑ 0.8% vs last month</div>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-          <div className="text-sm text-gray-600 mb-2">Average ROI</div>
-          <div className="text-3xl font-bold text-purple-600 mb-1">14.2%</div>
-          <div className="text-xs text-green-600">↑ 2.1% improvement</div>
+          <div className="text-sm text-gray-600 mb-2">Total Spend</div>
+          <div className="text-3xl font-bold text-purple-600">€18,450</div>
         </div>
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
           <div className="text-sm text-gray-600 mb-2">Cost Per Impression</div>
-          <div className="text-3xl font-bold text-orange-600 mb-1">€0.0075</div>
-          <div className="text-xs text-green-600">↓ €0.0012 vs target</div>
+          <div className="text-3xl font-bold text-orange-600">€0.0075</div>
         </div>
       </div>
 
@@ -67,7 +59,7 @@ export default function AnalyticsPage() {
           <div className="text-center text-gray-500">
             <div className="text-4xl mb-2">📊</div>
             <div>Performance chart would appear here</div>
-            <div className="text-sm">(Line chart showing impressions, engagement, ROI trends)</div>
+            <div className="text-sm">(Line chart showing impressions and spend trends)</div>
           </div>
         </div>
       </div>
@@ -81,8 +73,7 @@ export default function AnalyticsPage() {
               <tr className="border-b border-gray-200">
                 <th className="text-left py-3 px-4 font-semibold text-gray-700">Campaign</th>
                 <th className="text-left py-3 px-4 font-semibold text-gray-700">Impressions</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-700">Engagement</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-700">ROI</th>
+                <th className="text-left py-3 px-4 font-semibold text-gray-700">Spend</th>
                 <th className="text-left py-3 px-4 font-semibold text-gray-700">Cost/Impression</th>
               </tr>
             </thead>
@@ -90,22 +81,19 @@ export default function AnalyticsPage() {
               <tr className="border-b border-gray-100 hover:bg-gray-50">
                 <td className="py-3 px-4 font-medium">Summer Bus Campaign</td>
                 <td className="py-3 px-4">1.2M</td>
-                <td className="py-3 px-4 text-green-600">4.1%</td>
-                <td className="py-3 px-4 text-green-600">18.5%</td>
+                <td className="py-3 px-4">€18,450</td>
                 <td className="py-3 px-4">€0.0154</td>
               </tr>
               <tr className="border-b border-gray-100 hover:bg-gray-50">
-                <td className="py-3 px-4 font-medium">Downtown Express</td>
+                <td className="py-3 px-4 font-medium">Limassol Seafront Campaign</td>
                 <td className="py-3 px-4">850K</td>
-                <td className="py-3 px-4 text-green-600">3.2%</td>
-                <td className="py-3 px-4 text-green-600">14.2%</td>
+                <td className="py-3 px-4">€8,200</td>
                 <td className="py-3 px-4">€0.0096</td>
               </tr>
               <tr className="border-b border-gray-100 hover:bg-gray-50">
                 <td className="py-3 px-4 font-medium">City Routes Special</td>
                 <td className="py-3 px-4">450K</td>
-                <td className="py-3 px-4 text-orange-600">2.8%</td>
-                <td className="py-3 px-4 text-green-600">9.8%</td>
+                <td className="py-3 px-4">€4,000</td>
                 <td className="py-3 px-4">€0.0089</td>
               </tr>
             </tbody>

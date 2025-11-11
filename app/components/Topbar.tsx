@@ -19,7 +19,7 @@ export default function Topbar({ currentPortal, onPortalChange }: TopbarProps) {
       {/* Logo */}
       <div className="flex items-center gap-2">
         <div className="text-2xl">🚌</div>
-        <span className="text-xl font-bold text-blue-600">AdNovel</span>
+        <span className="text-xl font-bold text-blue-600">NovelAds</span>
       </div>
 
       {/* Portal Tabs */}
@@ -38,14 +38,6 @@ export default function Topbar({ currentPortal, onPortalChange }: TopbarProps) {
             <span className="font-medium">{portal.label}</span>
           </button>
         ))}
-      </div>
-
-      {/* Home Link */}
-      <div className="flex items-center gap-2">
-        <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200">
-          <span>🏠</span>
-          <span className="font-medium text-sm">Home</span>
-        </button>
       </div>
     </div>
   );

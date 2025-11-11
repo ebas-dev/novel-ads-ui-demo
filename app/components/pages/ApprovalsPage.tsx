@@ -6,9 +6,12 @@ interface PendingCampaign {
   id: number;
   name: string;
   client: string;
+  agency: string;
   type: string;
   budget: number;
   submittedDate: string;
+  status: 'pending' | 'urgent';
+  approvedByAdmin?: boolean;
 }
 
 interface PendingAccount {
@@ -24,42 +27,48 @@ export default function ApprovalsPage() {
     {
       id: 1,
       name: 'Winter Holiday Campaign',
-      client: 'Acme Corporation',
-      type: 'Bus Advertising',
+      client: 'Cyprus Retail Group',
+      agency: 'Nicosia Marketing Agency',
+      type: 'Intercity Bus - Nicosia-Limassol',
       budget: 30000,
       submittedDate: '2025-11-08',
+      status: 'urgent',
     },
     {
       id: 2,
       name: 'Spring Launch Ads',
-      client: 'TechStart Inc',
-      type: 'Train Advertising',
+      client: 'TechStart Cyprus Ltd',
+      agency: 'Limassol Creative Agency',
+      type: 'OSEA Bus - Larnaca Airport Express',
       budget: 22000,
       submittedDate: '2025-11-09',
+      status: 'pending',
     },
     {
       id: 3,
       name: 'Black Friday Special',
-      client: 'Local Business LLC',
-      type: 'Digital Display',
+      client: 'Paphos Business Center',
+      agency: 'Nicosia Marketing Agency',
+      type: 'OSEA Bus - Paphos Tourist Route',
       budget: 18000,
       submittedDate: '2025-11-10',
+      status: 'urgent',
     },
   ]);
 
   const [pendingAccounts, setPendingAccounts] = useState<PendingAccount[]>([
     {
       id: 1,
-      companyName: 'NewTech Solutions',
-      contactName: 'Alice Brown',
-      email: 'alice@newtech.com',
+      companyName: 'Cyprus Tech Solutions Ltd',
+      contactName: 'Maria Georgiou',
+      email: 'maria@cyprustech.com.cy',
       submittedDate: '2025-11-07',
     },
     {
       id: 2,
-      companyName: 'Green Energy Corp',
-      contactName: 'Bob Martinez',
-      email: 'bob@greenenergy.com',
+      companyName: 'Limassol Retail Group',
+      contactName: 'Andreas Christou',
+      email: 'andreas@limassolretail.com.cy',
       submittedDate: '2025-11-09',
     },
   ]);
@@ -119,12 +128,17 @@ export default function ApprovalsPage() {
                   <div>
                     <div className="flex items-center gap-3 mb-2">
                       <h3 className="text-lg font-bold text-gray-900">{campaign.name}</h3>
-                      <span className="px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
-                        PENDING
+                      <span className={`px-3 py-1 text-xs font-medium rounded-full ${
+                        campaign.status === 'urgent' 
+                          ? 'bg-red-100 text-red-800' 
+                          : 'bg-yellow-100 text-yellow-800'
+                      }`}>
+                        {campaign.status === 'urgent' ? '🔥 URGENT' : 'PENDING'}
                       </span>
                     </div>
                     <div className="text-sm text-gray-600 space-y-1">
                       <div>Client: <span className="font-medium text-gray-900">{campaign.client}</span></div>
+                      <div>Agency: <span className="font-medium text-gray-900">{campaign.agency}</span></div>
                       <div>Type: <span className="font-medium text-gray-900">{campaign.type}</span></div>
                       <div>Budget: <span className="font-medium text-blue-600">€{campaign.budget.toLocaleString()}</span></div>
                       <div>Submitted: <span className="font-medium text-gray-900">{new Date(campaign.submittedDate).toLocaleDateString()}</span></div>

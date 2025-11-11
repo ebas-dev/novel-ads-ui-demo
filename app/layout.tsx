@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AdNovel - Advertising Platform",
-  description: "Multi-portal advertising management platform",
+  title: "NovelAds - Bus Advertising Platform",
+  description: "Cyprus bus advertising management platform",
 };
 
 export default function RootLayout({

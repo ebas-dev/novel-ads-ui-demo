@@ -37,14 +37,43 @@ export function CreateCampaignModal({ isOpen, onClose }: { isOpen: boolean; onCl
     budget: '',
     startDate: '',
     endDate: '',
-    targetAudience: '',
-    campaignType: 'bus',
+    campaignType: 'intercity-bus',
+    selectedRoutes: [] as string[],
   });
+
+  // Sample routes - in production these would come from your database
+  const intercityRoutes = [
+    'Nicosia - Limassol',
+    'Nicosia - Larnaca',
+    'Nicosia - Paphos',
+    'Limassol - Paphos',
+    'Larnaca - Limassol',
+    'Paphos - Polis',
+  ];
+
+  const oseaRoutes = [
+    'Route 1: Nicosia City Center',
+    'Route 2: Limassol Seafront',
+    'Route 3: Larnaca Airport Express',
+    'Route 4: Paphos Tourist Route',
+    'Route 5: University of Cyprus Circuit',
+  ];
+
+  const availableRoutes = formData.campaignType === 'intercity-bus' ? intercityRoutes : oseaRoutes;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     alert('Campaign created! (This is a UI demo - no actual data is saved)');
     onClose();
+  };
+
+  const toggleRoute = (route: string) => {
+    setFormData({
+      ...formData,
+      selectedRoutes: formData.selectedRoutes.includes(route)
+        ? formData.selectedRoutes.filter(r => r !== route)
+        : [...formData.selectedRoutes, route]
+    });
   };
 
   return (
@@ -66,15 +95,50 @@ export function CreateCampaignModal({ isOpen, onClose }: { isOpen: boolean; onCl
           <label className="block text-sm font-medium text-gray-700 mb-1">Campaign Type</label>
           <select
             value={formData.campaignType}
-            onChange={(e) => setFormData({ ...formData, campaignType: e.target.value })}
+            onChange={(e) => setFormData({ ...formData, campaignType: e.target.value, selectedRoutes: [] })}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
-            <option value="bus">Bus Advertising</option>
-            <option value="train">Train Advertising</option>
-            <option value="billboard">Billboard</option>
-            <option value="digital">Digital Display</option>
+            <option value="intercity-bus">🚌 Intercity Bus Routes</option>
+            <option value="osea-bus">🚍 OSEA Bus Routes</option>
           </select>
+          {formData.campaignType === 'intercity-bus' && (
+            <p className="mt-1 text-xs text-gray-500">Long-distance bus routes between major cities</p>
+          )}
+          {formData.campaignType === 'osea-bus' && (
+            <p className="mt-1 text-xs text-gray-500">Local urban bus routes within city areas</p>
+          )}
         </div>
+
+        {/* Route Selection - Only show for bus campaigns */}
+        {(formData.campaignType === 'intercity-bus' || formData.campaignType === 'osea-bus') && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Select Routes 
+              <span className="ml-2 text-xs font-normal text-gray-500">
+                ({formData.selectedRoutes.length} selected)
+              </span>
+            </label>
+            <div className="border border-gray-300 rounded-lg p-3 max-h-48 overflow-y-auto">
+              {availableRoutes.map((route) => (
+                <label
+                  key={route}
+                  className="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    checked={formData.selectedRoutes.includes(route)}
+                    onChange={() => toggleRoute(route)}
+                    className="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  />
+                  <span className="text-sm text-gray-700">{route}</span>
+                </label>
+              ))}
+            </div>
+            {formData.selectedRoutes.length === 0 && (
+              <p className="mt-1 text-xs text-red-600">Please select at least one route</p>
+            )}
+          </div>
+        )}
 
         <div className="grid grid-cols-2 gap-4">
           <div>
@@ -108,17 +172,6 @@ export function CreateCampaignModal({ isOpen, onClose }: { isOpen: boolean; onCl
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Enter budget amount"
             required
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Target Audience</label>
-          <textarea
-            value={formData.targetAudience}
-            onChange={(e) => setFormData({ ...formData, targetAudience: e.target.value })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            rows={3}
-            placeholder="Describe your target audience"
           />
         </div>
 
@@ -379,22 +432,10 @@ export function AnalyticsModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
           <div className="bg-blue-50 p-4 rounded-lg">
             <div className="text-sm text-gray-600 mb-1">Total Impressions</div>
             <div className="text-2xl font-bold text-blue-600">2,456,789</div>
-            <div className="text-xs text-green-600 mt-1">↑ 15% vs last period</div>
-          </div>
-          <div className="bg-green-50 p-4 rounded-lg">
-            <div className="text-sm text-gray-600 mb-1">Engagement Rate</div>
-            <div className="text-2xl font-bold text-green-600">3.4%</div>
-            <div className="text-xs text-green-600 mt-1">↑ 0.8% vs last period</div>
-          </div>
-          <div className="bg-purple-50 p-4 rounded-lg">
-            <div className="text-sm text-gray-600 mb-1">ROI</div>
-            <div className="text-2xl font-bold text-purple-600">14.2%</div>
-            <div className="text-xs text-green-600 mt-1">↑ 2.1% improvement</div>
           </div>
           <div className="bg-orange-50 p-4 rounded-lg">
             <div className="text-sm text-gray-600 mb-1">Cost Per Impression</div>
             <div className="text-2xl font-bold text-orange-600">€0.0075</div>
-            <div className="text-xs text-green-600 mt-1">↓ €0.0012 vs target</div>
           </div>
         </div>
 
@@ -417,6 +458,243 @@ export function AnalyticsModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
           Close Analytics
         </button>
       </div>
+    </Modal>
+  );
+}
+
+// Generate Report Modal
+export function GenerateReportModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const [reportType, setReportType] = useState('campaign-draft');
+  const [selectedCampaigns, setSelectedCampaigns] = useState<string[]>([]);
+  const [dateRange, setDateRange] = useState({ start: '', end: '' });
+  const [format, setFormat] = useState('pdf');
+
+  const handleGenerateReport = (e: React.FormEvent) => {
+    e.preventDefault();
+    const reportTypeText = reportType === 'campaign-draft' ? 'Campaign Draft Report' : 'Campaign Overview & Analytics Report';
+    alert(`✅ ${reportTypeText} generated successfully!\n\nFormat: ${format.toUpperCase()}\n\n(This is a UI demo - in production, a ${format.toUpperCase()} file would be downloaded)`);
+    onClose();
+  };
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} title="Generate Report">
+      <form onSubmit={handleGenerateReport} className="space-y-6">
+        {/* Report Type Selection */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-3">Report Type</label>
+          <div className="space-y-3">
+            <label className="flex items-start p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+              <input
+                type="radio"
+                name="reportType"
+                value="campaign-draft"
+                checked={reportType === 'campaign-draft'}
+                onChange={(e) => setReportType(e.target.value)}
+                className="mt-1 mr-3"
+              />
+              <div>
+                <div className="font-semibold text-gray-900">📋 Campaign Draft Report</div>
+                <div className="text-sm text-gray-600">Generate a detailed draft report for a new campaign to share with your team for internal review</div>
+              </div>
+            </label>
+            
+            <label className="flex items-start p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+              <input
+                type="radio"
+                name="reportType"
+                value="campaign-overview"
+                checked={reportType === 'campaign-overview'}
+                onChange={(e) => setReportType(e.target.value)}
+                className="mt-1 mr-3"
+              />
+              <div>
+                <div className="font-semibold text-gray-900">📊 Campaign Overview & Analytics</div>
+                <div className="text-sm text-gray-600">Generate a comprehensive report of active campaigns with performance metrics and analytics</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        {/* Campaign Draft Specific Options */}
+        {reportType === 'campaign-draft' && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <h4 className="font-semibold text-blue-900 mb-2">Draft Campaign Details</h4>
+            <div className="space-y-3">
+              <div>
+                <label className="block text-sm font-medium text-blue-800 mb-1">Campaign Name</label>
+                <input
+                  type="text"
+                  className="w-full px-4 py-2 border border-blue-300 rounded-lg"
+                  placeholder="Enter campaign name"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-blue-800 mb-1">Campaign Type</label>
+                <select className="w-full px-4 py-2 border border-blue-300 rounded-lg">
+                  <option>🚌 Intercity Bus Routes</option>
+                  <option>🚍 OSEA Bus Routes</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-blue-800 mb-1">Routes</label>
+                <input
+                  type="text"
+                  className="w-full px-4 py-2 border border-blue-300 rounded-lg"
+                  placeholder="e.g., Nicosia-Limassol, Limassol Seafront"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm font-medium text-blue-800 mb-1">Budget (€)</label>
+                  <input
+                    type="number"
+                    className="w-full px-4 py-2 border border-blue-300 rounded-lg"
+                    placeholder="25000"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-blue-800 mb-1">Duration</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 border border-blue-300 rounded-lg"
+                    placeholder="3 months"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Campaign Overview Specific Options */}
+        {reportType === 'campaign-overview' && (
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+            <h4 className="font-semibold text-green-900 mb-3">Select Campaigns</h4>
+            <div className="space-y-2 max-h-48 overflow-y-auto">
+              {['Summer Bus Campaign', 'Downtown Express', 'City Routes Special', 'Holiday Campaign 2025'].map((campaign) => (
+                <label key={campaign} className="flex items-center p-2 hover:bg-green-100 rounded cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={selectedCampaigns.includes(campaign)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedCampaigns([...selectedCampaigns, campaign]);
+                      } else {
+                        setSelectedCampaigns(selectedCampaigns.filter(c => c !== campaign));
+                      }
+                    }}
+                    className="mr-3"
+                  />
+                  <span className="text-sm text-green-900">{campaign}</span>
+                </label>
+              ))}
+            </div>
+            
+            <div className="mt-4 grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-sm font-medium text-green-800 mb-1">Start Date</label>
+                <input
+                  type="date"
+                  value={dateRange.start}
+                  onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })}
+                  className="w-full px-4 py-2 border border-green-300 rounded-lg"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-green-800 mb-1">End Date</label>
+                <input
+                  type="date"
+                  value={dateRange.end}
+                  onChange={(e) => setDateRange({ ...dateRange, end: e.target.value })}
+                  className="w-full px-4 py-2 border border-green-300 rounded-lg"
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Format Selection */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Export Format</label>
+          <div className="grid grid-cols-3 gap-3">
+            {['pdf', 'excel', 'powerpoint'].map((fmt) => (
+              <label
+                key={fmt}
+                className={`flex items-center justify-center p-3 border-2 rounded-lg cursor-pointer transition-colors ${
+                  format === fmt
+                    ? 'border-blue-600 bg-blue-50'
+                    : 'border-gray-300 hover:bg-gray-50'
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="format"
+                  value={fmt}
+                  checked={format === fmt}
+                  onChange={(e) => setFormat(e.target.value)}
+                  className="sr-only"
+                />
+                <div className="text-center">
+                  <div className="text-2xl mb-1">
+                    {fmt === 'pdf' && '📄'}
+                    {fmt === 'excel' && '📊'}
+                    {fmt === 'powerpoint' && '📽️'}
+                  </div>
+                  <div className="text-xs font-semibold text-gray-700 uppercase">{fmt}</div>
+                </div>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        {/* Include Options */}
+        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+          <h4 className="font-semibold text-gray-900 mb-3">Include in Report</h4>
+          <div className="space-y-2">
+            <label className="flex items-center">
+              <input type="checkbox" defaultChecked className="mr-3" />
+              <span className="text-sm text-gray-700">Executive Summary</span>
+            </label>
+            <label className="flex items-center">
+              <input type="checkbox" defaultChecked className="mr-3" />
+              <span className="text-sm text-gray-700">Performance Metrics</span>
+            </label>
+            {reportType === 'campaign-overview' && (
+              <>
+                <label className="flex items-center">
+                  <input type="checkbox" defaultChecked className="mr-3" />
+                  <span className="text-sm text-gray-700">Charts & Visualizations</span>
+                </label>
+                <label className="flex items-center">
+                  <input type="checkbox" className="mr-3" />
+                  <span className="text-sm text-gray-700">Detailed Analytics</span>
+                </label>
+              </>
+            )}
+            <label className="flex items-center">
+              <input type="checkbox" className="mr-3" />
+              <span className="text-sm text-gray-700">Company Branding</span>
+            </label>
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="flex gap-3">
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-300 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+          >
+            Generate Report
+          </button>
+        </div>
+      </form>
     </Modal>
   );
 }

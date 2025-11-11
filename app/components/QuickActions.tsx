@@ -15,17 +15,21 @@ type ActionButton = {
 const actionsMap: Record<string, ActionButton[]> = {
   client: [
     { id: 'create-campaign', label: 'Create New Campaign', icon: '➕', variant: 'primary' },
+    { id: 'generate-report', label: 'Generate Report', icon: '📄', variant: 'info' },
     { id: 'view-analytics', label: 'View Analytics', icon: '📊', variant: 'info' },
+    { id: 'upload-asset', label: 'Upload Asset', icon: '📁', variant: 'success' },
   ],
   agency: [
     { id: 'add-client', label: 'Add New Client', icon: '➕', variant: 'primary' },
-    { id: 'create-campaign', label: 'Create Campaign Suggestion', icon: '📢', variant: 'success' },
+    { id: 'create-campaign', label: 'Create Campaign', icon: '📢', variant: 'success' },
+    { id: 'generate-report', label: 'Generate Report', icon: '📄', variant: 'info' },
+    { id: 'view-analytics', label: 'View Per-Client Analytics', icon: '📈', variant: 'info' },
   ],
   admin: [
-    { id: 'edit-campaign', label: 'Edit Campaign', icon: '✏️', variant: 'primary' },
-    { id: 'approve-campaign', label: 'Approve Campaign', icon: '✅', variant: 'success' },
-    { id: 'approve-account', label: 'Approve Account', icon: '�', variant: 'success' },
-    { id: 'register-company', label: 'Register New Company', icon: '🏢', variant: 'info' },
+    { id: 'approve-campaign', label: 'Review Approvals', icon: '✅', variant: 'success' },
+    { id: 'register-company', label: 'Register New Company', icon: '🏢', variant: 'primary' },
+    { id: 'edit-formula', label: 'Edit Formula/Metric', icon: '📐', variant: 'info' },
+    { id: 'view-activity', label: 'View Activity Log', icon: '📝', variant: 'info' },
   ],
 };
 

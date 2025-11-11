@@ -6,11 +6,11 @@ import Sidebar from './components/Sidebar';
 import DashboardCards from './components/DashboardCards';
 import QuickActions from './components/QuickActions';
 import { 
-  CreateCampaignModal, 
   AddClientModal, 
   ApproveCampaignModal, 
   RegisterCompanyModal,
-  AnalyticsModal 
+  AnalyticsModal,
+  GenerateReportModal
 } from './components/Modals';
 
 // Page Components
@@ -22,6 +22,11 @@ import CompanyManagementPage from './components/pages/CompanyManagementPage';
 import AccountManagementPage from './components/pages/AccountManagementPage';
 import DataMetricsPage from './components/pages/DataMetricsPage';
 import ActivityLogPage from './components/pages/ActivityLogPage';
+import AssetManagementPage from './components/pages/AssetManagementPage';
+import UserManagementPage from './components/pages/UserManagementPage';
+import FormsMetricsPage from './components/pages/FormsMetricsPage';
+import ServiceSelectionPage from './components/pages/ServiceSelectionPage';
+import CreateCampaignPage from './components/pages/CreateCampaignPage';
 
 type PortalType = 'client' | 'agency' | 'admin';
 
@@ -33,7 +38,7 @@ export default function Home() {
   const handleActionClick = (action: string) => {
     // Map action IDs to modal types based on flowchart
     if (action === 'create-campaign') {
-      setActiveModal('create-campaign');
+      setActiveMenuItem('create-campaign');
     } else if (action === 'view-analytics') {
       setActiveMenuItem('analytics');
     } else if (action === 'add-client') {
@@ -42,6 +47,14 @@ export default function Home() {
       setActiveMenuItem('approvals');
     } else if (action === 'register-company') {
       setActiveModal('register-company');
+    } else if (action === 'upload-asset') {
+      setActiveMenuItem('assets');
+    } else if (action === 'edit-formula') {
+      setActiveMenuItem('forms-metrics');
+    } else if (action === 'view-activity') {
+      setActiveMenuItem('activity-log');
+    } else if (action === 'generate-report') {
+      setActiveModal('generate-report');
     } else if (action === 'edit-campaign' || action === 'approve-account') {
       alert(`Action: ${action}\n\nThis would open a modal for ${action.replace('-', ' ')}.\n(This is a UI demo)`);
     } else {
@@ -105,28 +118,60 @@ export default function Home() {
           {/* Additional Content Area */}
           {activeMenuItem !== 'dashboard' && (
             <div>
+              {/* Create Campaign Page - Available for all portals */}
+              {activeMenuItem === 'create-campaign' && (
+                <CreateCampaignPage 
+                  onBack={() => setActiveMenuItem('dashboard')} 
+                  userRole={currentPortal}
+                />
+              )}
+
               {/* Client Portal Pages */}
               {currentPortal === 'client' && activeMenuItem === 'campaigns' && (
-                <CampaignPage onCreateNew={() => setActiveModal('create-campaign')} />
+                <CampaignPage 
+                  onCreateNew={() => setActiveMenuItem('create-campaign')} 
+                  onGenerateReport={() => setActiveModal('generate-report')}
+                />
+              )}
+              {currentPortal === 'client' && activeMenuItem === 'services' && (
+                <ServiceSelectionPage />
               )}
               {currentPortal === 'client' && activeMenuItem === 'analytics' && (
                 <AnalyticsPage />
               )}
+              {currentPortal === 'client' && activeMenuItem === 'assets' && (
+                <AssetManagementPage />
+              )}
               {currentPortal === 'client' && activeMenuItem === 'account-management' && (
-                <AccountManagementPage />
+                <AccountManagementPage portalType="client" />
               )}
 
               {/* Agency Portal Pages */}
               {currentPortal === 'agency' && activeMenuItem === 'client-management' && (
                 <ClientManagementPage onAddClient={() => setActiveModal('add-client')} />
               )}
+              {currentPortal === 'agency' && activeMenuItem === 'campaigns' && (
+                <CampaignPage 
+                  onCreateNew={() => setActiveMenuItem('create-campaign')} 
+                  onGenerateReport={() => setActiveModal('generate-report')}
+                />
+              )}
+              {currentPortal === 'agency' && activeMenuItem === 'services' && (
+                <ServiceSelectionPage />
+              )}
               {currentPortal === 'agency' && activeMenuItem === 'analytics' && (
                 <AnalyticsPage />
+              )}
+              {currentPortal === 'agency' && activeMenuItem === 'assets' && (
+                <AssetManagementPage />
+              )}
+              {currentPortal === 'agency' && activeMenuItem === 'account-management' && (
+                <AccountManagementPage portalType="agency" />
               )}
 
               {/* Admin Portal Pages */}
               {currentPortal === 'admin' && activeMenuItem === 'campaign-management' && (
-                <CampaignPage onCreateNew={() => setActiveModal('create-campaign')} />
+                <CampaignPage onCreateNew={() => setActiveMenuItem('create-campaign')} />
               )}
               {currentPortal === 'admin' && activeMenuItem === 'approvals' && (
                 <ApprovalsPage />
@@ -134,8 +179,17 @@ export default function Home() {
               {currentPortal === 'admin' && activeMenuItem === 'company-management' && (
                 <CompanyManagementPage onRegisterNew={() => setActiveModal('register-company')} />
               )}
+              {currentPortal === 'admin' && activeMenuItem === 'user-management' && (
+                <UserManagementPage />
+              )}
               {currentPortal === 'admin' && activeMenuItem === 'data-metrics' && (
                 <DataMetricsPage />
+              )}
+              {currentPortal === 'admin' && activeMenuItem === 'forms-metrics' && (
+                <FormsMetricsPage />
+              )}
+              {currentPortal === 'admin' && activeMenuItem === 'assets' && (
+                <AssetManagementPage />
               )}
               {currentPortal === 'admin' && activeMenuItem === 'activity-log' && (
                 <ActivityLogPage />
@@ -146,10 +200,6 @@ export default function Home() {
       </main>
 
       {/* Modals */}
-      <CreateCampaignModal 
-        isOpen={activeModal === 'create-campaign'} 
-        onClose={() => setActiveModal(null)} 
-      />
       <AddClientModal 
         isOpen={activeModal === 'add-client'} 
         onClose={() => setActiveModal(null)} 
@@ -160,6 +210,10 @@ export default function Home() {
       />
       <RegisterCompanyModal 
         isOpen={activeModal === 'register-company'} 
+        onClose={() => setActiveModal(null)} 
+      />
+      <GenerateReportModal 
+        isOpen={activeModal === 'generate-report'} 
         onClose={() => setActiveModal(null)} 
       />
     </div>

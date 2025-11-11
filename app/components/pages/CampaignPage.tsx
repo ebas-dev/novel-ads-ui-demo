@@ -6,48 +6,69 @@ interface Campaign {
   id: number;
   name: string;
   type: string;
-  status: 'active' | 'pending' | 'completed';
+  status: 'draft' | 'pending' | 'approved' | 'active' | 'paused' | 'completed';
+  approvalStatus: 'pending' | 'approved' | 'rejected' | 'not_submitted';
   budget: number;
   spent: number;
   impressions: string;
   startDate: string;
   endDate: string;
+  client: string;
 }
 
-export default function CampaignPage({ onCreateNew }: { onCreateNew: () => void }) {
+export default function CampaignPage({ onCreateNew, onGenerateReport }: { onCreateNew: () => void; onGenerateReport?: () => void }) {
   const [campaigns] = useState<Campaign[]>([
     {
       id: 1,
       name: 'Summer Bus Campaign',
-      type: 'Bus Advertising',
+      type: 'Intercity Bus - Nicosia-Limassol',
       status: 'active',
+      approvalStatus: 'approved',
       budget: 25000,
       spent: 18450,
       impressions: '1.2M',
       startDate: '2025-06-01',
       endDate: '2025-08-31',
+      client: 'Cyprus Retail Group',
     },
     {
       id: 2,
-      name: 'Downtown Express',
-      type: 'Train Advertising',
+      name: 'Limassol Seafront Campaign',
+      type: 'OSEA Bus - Limassol Seafront',
       status: 'active',
+      approvalStatus: 'approved',
       budget: 15000,
       spent: 8200,
       impressions: '850K',
       startDate: '2025-07-15',
       endDate: '2025-09-15',
+      client: 'Cyprus Retail Group',
     },
     {
       id: 3,
       name: 'City Routes Special',
-      type: 'Bus Advertising',
-      status: 'pending',
+      type: 'OSEA Bus - Multiple Routes',
+      status: 'draft',
+      approvalStatus: 'not_submitted',
       budget: 20000,
       spent: 0,
       impressions: '0',
       startDate: '2025-12-01',
       endDate: '2026-02-28',
+      client: 'Cyprus Retail Group',
+    },
+    {
+      id: 4,
+      name: 'Holiday Campaign 2025',
+      type: 'Intercity Bus - Nicosia-Paphos',
+      status: 'pending',
+      approvalStatus: 'pending',
+      budget: 30000,
+      spent: 0,
+      impressions: '0',
+      startDate: '2025-12-15',
+      endDate: '2026-01-15',
+      client: 'Cyprus Retail Group',
     },
   ]);
 
@@ -57,7 +78,28 @@ export default function CampaignPage({ onCreateNew }: { onCreateNew: () => void 
         return 'bg-green-100 text-green-800';
       case 'pending':
         return 'bg-yellow-100 text-yellow-800';
+      case 'approved':
+        return 'bg-blue-100 text-blue-800';
+      case 'draft':
+        return 'bg-gray-100 text-gray-800';
+      case 'paused':
+        return 'bg-orange-100 text-orange-800';
       case 'completed':
+        return 'bg-purple-100 text-purple-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getApprovalStatusColor = (approvalStatus: string) => {
+    switch (approvalStatus) {
+      case 'approved':
+        return 'bg-green-100 text-green-800';
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'rejected':
+        return 'bg-red-100 text-red-800';
+      case 'not_submitted':
         return 'bg-gray-100 text-gray-800';
       default:
         return 'bg-gray-100 text-gray-800';
@@ -76,13 +118,24 @@ export default function CampaignPage({ onCreateNew }: { onCreateNew: () => void 
           <h1 className="text-2xl font-bold text-gray-900 mb-2">My Campaigns</h1>
           <p className="text-gray-600">Manage and monitor your advertising campaigns</p>
         </div>
-        <button
-          onClick={onCreateNew}
-          className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center gap-2"
-        >
-          <span>➕</span>
-          Create New Campaign
-        </button>
+        <div className="flex gap-3">
+          {onGenerateReport && (
+            <button
+              onClick={onGenerateReport}
+              className="bg-white text-blue-600 border-2 border-blue-600 px-6 py-3 rounded-lg font-medium hover:bg-blue-50 transition-colors flex items-center gap-2"
+            >
+              <span>📄</span>
+              Generate Report
+            </button>
+          )}
+          <button
+            onClick={onCreateNew}
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center gap-2"
+          >
+            <span>➕</span>
+            Create New Campaign
+          </button>
+        </div>
       </div>
 
       {/* Campaigns Grid */}
@@ -96,15 +149,36 @@ export default function CampaignPage({ onCreateNew }: { onCreateNew: () => void 
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(campaign.status)}`}>
                     {campaign.status.toUpperCase()}
                   </span>
+                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${getApprovalStatusColor(campaign.approvalStatus)}`}>
+                    Approval: {campaign.approvalStatus.replace('_', ' ').toUpperCase()}
+                  </span>
                 </div>
-                <p className="text-gray-600">{campaign.type}</p>
+                <p className="text-gray-600">{campaign.type} • {campaign.client}</p>
               </div>
-              <button
-                onClick={() => handleUpdateCampaign(campaign.id, campaign.name)}
-                className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors"
-              >
-                Update Campaign
-              </button>
+              <div className="flex gap-2">
+                {campaign.status === 'draft' && (
+                  <button
+                    onClick={() => alert(`Submit "${campaign.name}" for approval\n(This is a UI demo)`)}
+                    className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                  >
+                    Submit for Approval
+                  </button>
+                )}
+                {campaign.status === 'approved' && (
+                  <button
+                    onClick={() => alert(`Launch "${campaign.name}"\n(This is a UI demo)`)}
+                    className="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition-colors"
+                  >
+                    Launch Campaign
+                  </button>
+                )}
+                <button
+                  onClick={() => handleUpdateCampaign(campaign.id, campaign.name)}
+                  className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+                >
+                  Edit
+                </button>
+              </div>
             </div>
 
             {/* Campaign Stats */}

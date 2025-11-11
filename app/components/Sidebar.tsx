@@ -15,21 +15,30 @@ interface SidebarProps {
 const menuItems: Record<string, MenuItem[]> = {
   client: [
     { id: 'dashboard', label: 'Dashboard', icon: '📊' },
-    { id: 'campaigns', label: 'Campaign Page', icon: '�' },
-    { id: 'analytics', label: 'Analytics Page', icon: '�' },
-    { id: 'account-management', label: 'Account Management', icon: '�' },
+    { id: 'campaigns', label: 'Campaign Page', icon: '📢' },
+    { id: 'services', label: 'Service Selection', icon: '🎨' },
+    { id: 'analytics', label: 'Analytics Page', icon: '📈' },
+    { id: 'assets', label: 'Asset Management', icon: '📁' },
+    { id: 'account-management', label: 'Account Management', icon: '⚙️' },
   ],
   agency: [
     { id: 'dashboard', label: 'Dashboard', icon: '📊' },
     { id: 'client-management', label: 'Client Management', icon: '👥' },
+    { id: 'campaigns', label: 'Campaign Page', icon: '📢' },
+    { id: 'services', label: 'Service Selection', icon: '🎨' },
     { id: 'analytics', label: 'Analytics Page', icon: '📈' },
+    { id: 'assets', label: 'Asset Management', icon: '📁' },
+    { id: 'account-management', label: 'Account Management', icon: '⚙️' },
   ],
   admin: [
     { id: 'dashboard', label: 'Dashboard', icon: '📊' },
     { id: 'campaign-management', label: 'Campaign Management', icon: '📢' },
     { id: 'approvals', label: 'Approvals', icon: '✅' },
     { id: 'company-management', label: 'Company Management', icon: '🏢' },
+    { id: 'user-management', label: 'User Management', icon: '👥' },
     { id: 'data-metrics', label: 'Data and Analytics Metrics', icon: '📊' },
+    { id: 'forms-metrics', label: 'Pricing Formulas', icon: '�' },
+    { id: 'assets', label: 'Asset Management', icon: '📁' },
     { id: 'activity-log', label: 'Activity Log', icon: '📝' },
   ],
 };
